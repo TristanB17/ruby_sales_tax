@@ -4,6 +4,4 @@ class Receipt
   def initialize(filepath)
     @list = File.read(filepath).split("\n")
   end
-
-  
 end

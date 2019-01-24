@@ -6,7 +6,7 @@ class Item
   end
 
   def quantity
-    @quantity ||= @base_string[0].to_f
+    @quantity ||= BigDecimal.new(@base_string[0])
   end
 
   def name
@@ -14,7 +14,7 @@ class Item
   end
 
   def price
-    @price ||= Price.new(@base_string[-1].to_f)
+    @price ||= Price.new(@base_string[-1])
   end
 
   def total_price
@@ -22,13 +22,13 @@ class Item
   end
 
   def total_sales_tax
-    @total_sales_tax || (price.sales_tax.round(2)) * 2
+    @total_sales_tax || price.sales_tax * quantity
   end
 
   def get_total_price
-    price.add_non_exempt_tax if check_for_non_exemption
-    price.add_import_tax if check_for_non_exemption
-    (price.amount + price.sales_tax).round(2) * quantity
+    price.add_tax if check_for_non_exemption
+    price.add_tax('import') if check_for_non_exemption
+    (price.amount + price.sales_tax) * quantity
   end
 
   def check_for_non_exemption
