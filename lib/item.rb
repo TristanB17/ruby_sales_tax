@@ -1,4 +1,5 @@
 require_relative 'price.rb'
+require 'pry'
 
 class Item
   def initialize(string)
@@ -10,7 +11,9 @@ class Item
   end
 
   def name
-    @name ||= @base_string[1...-1].join(' ')
+    name_array = @base_string[1...-1]
+    name_array.pop
+    name_array.join(' ')
   end
 
   def price
@@ -18,17 +21,16 @@ class Item
   end
 
   def total_price
-    @total_price || get_total_price
+    @total_price || ((price.amount + price.sales_tax) * quantity)
   end
 
   def total_sales_tax
-    @total_sales_tax || price.sales_tax * quantity
+    @total_sales_tax || (price.sales_tax * quantity)
   end
 
-  def get_total_price
+  def get_totals
     price.add_tax if check_for_non_exemption
-    price.add_tax('import') if check_for_non_exemption
-    (price.amount + price.sales_tax) * quantity
+    price.add_tax('import') if check_for_import
   end
 
   def check_for_non_exemption

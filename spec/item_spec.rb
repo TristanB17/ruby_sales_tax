@@ -6,7 +6,7 @@ describe 'an item' do
       item = Item.new('1 book at 12.49')
       book_price = 12.49
       item_quantity = 1
-      item_name = 'book at'
+      item_name = 'book'
       item_sales_tax = 0
 
       expect(item.quantity).to eq(item_quantity)
@@ -38,15 +38,19 @@ describe 'an item' do
       item = Item.new('1 imported bottle of perfume at 27.99')
       expected_total = 32.19
 
-      expect(item.get_total_price).to eq(expected_total)
+      item.get_totals
+
+      expect(item.total_price.to_f).to eq(expected_total)
     end
     it 'accounts for quantity' do
       item = Item.new('2 imported bottles of perfume at 27.99')
       expected_total = 64.38
       expected_sales_tax = 8.40
 
-      expect(item.total_price).to eq(expected_total)
-      expect(item.total_sales_tax).to eq(expected_sales_tax)
+      item.get_totals
+
+      expect(item.total_price.to_f).to eq(expected_total)
+      expect(item.total_sales_tax.to_f).to eq(expected_sales_tax)
     end
   end
 end
